@@ -1443,6 +1443,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vuetify@npm:^3.4.8":
+  version: 3.4.8
+  resolution: "vuetify@npm:3.4.8"
+  peerDependencies:
+    typescript: ">=4.7"
+    vite-plugin-vuetify: ">=1.0.0-alpha.12"
+    vue: ^3.3.0
+    vue-i18n: ^9.0.0
+    webpack-plugin-vuetify: ">=2.0.0-alpha.11"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+    vite-plugin-vuetify:
+      optional: true
+    vue-i18n:
+      optional: true
+    webpack-plugin-vuetify:
+      optional: true
+  checksum: ceecbfcdf508c773494cceb06d1031be2994f0657b468c46d0249ae5aa390cfd3988a5f4dbc71c79f6fe09b8fa02d886479d6c755e79e6b5016cbc8a256fd3d1
+  languageName: node
+  linkType: hard
+
 "web-design-class@workspace:.":
   version: 0.0.0-use.local
   resolution: "web-design-class@workspace:."
@@ -1450,6 +1472,7 @@ __metadata:
     "@vitejs/plugin-vue": ^4.5.0
     vite: ^5.0.0
     vue: ^3.3.8
+    vuetify: ^3.4.8
   languageName: unknown
   linkType: soft
 
