@@ -7,7 +7,7 @@
         <div style="display:flex; align-items:center;">
             
             <!-- 展開清單按鈕 -->
-            <div class="button list_image header_button" @click="click_list_expand">
+            <div class="button list_image navbar_button" @click="click_list_expand">
                 <img src="https://api.iconify.design/prime:list.svg" width="36" height="36">
             </div>
             
@@ -33,7 +33,7 @@
         </div>
         
         <!-- 橫條右邊 -->
-        <div style="flex:auto; display:flex; align-items:center; justify-content:flex-end;">
+        <div style="flex:auto; display:flex; align-items:center; justify-content:flex-end; padding-right:20px;">
             
             <!-- 亮度滑桿 -->
             <div style="width:max(15%,180px);">
@@ -46,16 +46,27 @@
             </div>
             
             <!-- 亮度數值框 -->
-            <div style="width:58px;">
+            <div style="width:58px; margin-right:50px;">
                 <v-text-field
                 v-model="light"
                 hide-details
                 density="compact"/>
             </div>
             
-            <div style="padding:0 20px 0 50px;">
-                by 小白SSS
-            </div>
+            <!-- 使用者(整體) -->
+            <div class="button user navbar_button" @click="open_personal_setting">
+                    <!-- 使用者icon -->
+                    <div class="user_icon">
+                        <img src="https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa" width="26" height="26">
+                    </div>
+                    {{ now_nickname }}
+                </div>
+
+                <!-- 使用者與登出間的分隔線 -->
+                <div style="height:30px; border-right:2px #777777 solid; margin:0px 15px 0px 15px;"></div>
+
+                <!-- 登出按鈕 -->
+                <div class="button logout navbar_button" @click="_logout">登出</div>
         </div>
     </div>
 </template>
@@ -77,6 +88,8 @@ const props = defineProps({
     choose:{},
     list_names:{}
 })
+
+const now_nickname = ref("小白SSS")
 </script>
 
 
@@ -111,10 +124,35 @@ const props = defineProps({
     padding-left:10px;
     padding-bottom:4px;
 }
-.header_button{
+.navbar_button{
     background-color:#aaaaaa;
 }
-.header_button:hover{
+.navbar_button:hover{
     background-color: #666666;
+}
+.user{  /* "使用者"按鈕(整體) */
+    display:flex;
+    align-items:center;
+    padding:5px;
+    border:0px #000000 solid;
+    border-radius:10px;
+}
+.user_icon{  /* 使用者icon */
+    width:26px;
+    height:26px;
+    background-color:#444444;
+    border-radius:100%;
+    margin-right:5px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+.logout{  /* 登出按鈕 */
+    display:flex;
+    align-items:center;
+    padding:5px;
+    border:0px #000000 solid;
+    border-radius:10px;
 }
 </style>

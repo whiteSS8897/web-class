@@ -1,26 +1,29 @@
 <template>
-    <navbar @update_light="set_new_light" @list_expand="click_list_expand"
+    <loginpage v-if="keep_login === false"/>
+    <div v-if="keep_login === true">
+        <navbar @update_light="set_new_light" @list_expand="click_list_expand"
         v-bind:choose="choose" v-bind:list_names="list_names"/>
-    <div class="box">
-        <div class="list">
-            <mainlist @update="list_choose_handle" v-bind:names="list_names"/>
-        </div>
-
-        <div class="main_page">
-            <div v-if="choose === '1-1'"><page1_1/></div>
-            <div v-if="choose === '1-2'"><page1_2/></div>
-            <div v-if="choose === '2-1'"><page2_1/></div>
-            <div v-if="choose === '2-2'"><page2_2/></div>
-            <div v-if="choose === '3-1'"><page3_1/></div>
-            <div v-if="choose === '3-2'"><page3_2/></div>
-            <div v-if="choose === '3-3'"><page3_3/></div>
-            <div v-if="choose === '3-4'"><page3_4/></div>
-            <div v-if="choose === '3-5'"><page3_5/></div>
-            <div v-if="choose === '4'"><page4/></div>
-            <div v-if="choose === '5'"><page5/></div>
-            <div v-if="choose === '6'"><page6/></div>
-            <div v-if="choose === '7'"><page7/></div>
-            <div v-if="choose === '8'"><page8/></div>
+        <div class="box">
+            <div class="list">
+                <mainlist @update="list_choose_handle" v-bind:names="list_names"/>
+            </div>
+            
+            <div class="main_page">
+                <div v-if="choose === '1-1'"><page1_1/></div>
+                <div v-if="choose === '1-2'"><page1_2/></div>
+                <div v-if="choose === '2-1'"><page2_1/></div>
+                <div v-if="choose === '2-2'"><page2_2/></div>
+                <div v-if="choose === '3-1'"><page3_1/></div>
+                <div v-if="choose === '3-2'"><page3_2/></div>
+                <div v-if="choose === '3-3'"><page3_3/></div>
+                <div v-if="choose === '3-4'"><page3_4/></div>
+                <div v-if="choose === '3-5'"><page3_5/></div>
+                <div v-if="choose === '4'"><page4/></div>
+                <div v-if="choose === '5'"><page5/></div>
+                <div v-if="choose === '6'"><page6/></div>
+                <div v-if="choose === '7'"><page7/></div>
+                <div v-if="choose === '8'"><page8/></div>
+            </div>
         </div>
     </div>
 </template>
@@ -85,6 +88,11 @@ const choose = ref("1-1")  //表示選擇清單第幾個
     const list_choose_handle = (new_list_choise)=>{
         choose.value = new_list_choise;
     }
+
+
+import loginpage from "./loginpage.vue"
+
+const keep_login = ref(false);
 </script>
 
 
