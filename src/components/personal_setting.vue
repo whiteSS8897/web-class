@@ -41,7 +41,7 @@
 
 <script setup>
 import {computed, reactive, ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, watch} from "vue";
-import data from "../../public/json/SettingConfig.json";
+import data from "/SettingConfig.json?url";
 
     var _settings = reactive({});
     var _frontend = reactive({});

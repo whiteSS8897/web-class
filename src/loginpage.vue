@@ -76,7 +76,7 @@ import data from "/SettingConfig.json?url";
                                 body:JSON.stringify(_body)
 
         }
-        await fetch("http://"+_frontend["HOSTNAMe"]+":"+_frontend["LoginBackEndPort"]+"/login/",requestOptions)
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Login_Backend_port"]+"/login/",requestOptions)
         .then(res =>{
             return res.text();
         })
