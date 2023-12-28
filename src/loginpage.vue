@@ -76,7 +76,7 @@ import data from "/SettingConfig.json?url";
                                 body:JSON.stringify(_body)
 
         }
-        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Login_Backend_port"]+"/login/",requestOptions)
+        await fetch("http://localhost:9804/login/",requestOptions)
         .then(res =>{
             return res.text();
         })
@@ -128,7 +128,8 @@ import data from "/SettingConfig.json?url";
                                 },
                                 body:JSON.stringify(_body)
         }
-        await fetch("http://"+_frontend["HOSTNAMe"]+":"+_frontend["LoginBackEndPort"]+"/checkToken/",requestOptions)
+        // await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkToken/",requestOptions)
+        await fetch("http://localhost:9804/checkToken/",requestOptions)
         .then(res =>{
             return res.text();
         })
