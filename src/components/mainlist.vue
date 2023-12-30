@@ -1,127 +1,98 @@
 <template>
-    <details class="detail_1" open>
-        <summary class="button summary_1" style="height:25px;" @click="all_other_hide($event)">
-        分類ㄧ
-        </summary>
+    <div>
+        <details class="detail_1" open>
+            <summary class="button summary_1" style="height:25px;" @click="all_other_hide($event)">
+            符文相關
+            </summary>
 
-            <div style="border-left:16px #222222 solid;">
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('1-1') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)"
-                    style="border-left:16px #555555 solid; background-color:#99bbff;"
-                    >
-                {{names["page1_1"]}}
+                <div style="border-left:16px #8800ff solid;">
+                    <div class="button detail_1_choice final_choice choosed_final_choice"
+                        @click="choose_list('1-1') ,choosed_list($event)">
+                    {{names["page1_1"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('1-2') ,choosed_list($event)">
+                    {{names["page1_2"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('1-3') ,choosed_list($event)">
+                    {{names["page1_3"]}}
+                    </div>
                 </div>
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('1-2') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page1_2"]}}
-                </div>
-            </div>
-    </details>
+        </details>
 
-    <details class="detail_1">
-        <summary class="button summary_1" style="height:25px;" @click="all_other_hide($event)">
-        分類二
-        </summary>
+        <details class="detail_1">
+            <summary class="button summary_1" style="height:25px;" @click="all_other_hide($event)">
+            class 2
+            </summary>
 
-            <div style="border-left:16px #222222 solid;">
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('2-1') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page2_1"]}}
+                <div style="border-left:16px #8800ff solid;">
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('2-1') ,choosed_list($event)">
+                    {{names["page2_1"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('2-2') ,choosed_list($event)">
+                    {{names["page2_2"]}}
+                    </div>
                 </div>
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('2-2') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page2_2"]}}
-                </div>
-            </div>
-    </details>
+        </details>
 
-    <details class="detail_1">
-        <summary class="button summary_1" style="height:25px;" @click="all_other_hide($event)">
-        分類三
-        </summary>
+        <details class="detail_1">
+            <summary class="button summary_1" style="height:25px;" @click="all_other_hide($event)">
+            class 3
+            </summary>
 
-            <div style="border-left:16px #222222 solid;">
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('3-1') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page3_1"]}}
+                <div style="border-left:16px #8800ff solid;">
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('3-1') ,choosed_list($event)">
+                    {{names["page3_1"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('3-2') ,choosed_list($event)">
+                    {{names["page3_2"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('3-3') ,choosed_list($event)">
+                    {{names["page3_3"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('3-4') ,choosed_list($event)">
+                    {{names["page3_4"]}}
+                    </div>
+                    <div class="button detail_1_choice final_choice"
+                        @click="choose_list('3-5') ,choosed_list($event)">
+                    {{names["page3_5"]}}
+                    </div>
                 </div>
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('3-2') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page3_2"]}}
-                </div>
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('3-3') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page3_3"]}}
-                </div>
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('3-4') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page3_4"]}}
-                </div>
-                <div class="button detail_1_choice final_choice"
-                    @click="choose_list('3-5') ,choosed_list($event)"
-                    @mouseenter="touch_list($event)"
-                    @mouseleave="untouch_list($event)">
-                {{names["page3_5"]}}
-                </div>
-            </div>
-    </details>
-    
-    <div class="button list_choice final_choice"
-        @click="choose_list('4') ,all_other_hide($event) ,choosed_list($event)"
-        @mouseenter="touch_list($event)"
-        @mouseleave="untouch_list($event)"
-        style="background-color:#dddddd;">
-        {{names["page4"]}}
-    </div>
-    <div class="button list_choice final_choice"
-        @click="choose_list('5') ,all_other_hide($event) ,choosed_list($event)"
-        @mouseenter="touch_list($event)"
-        @mouseleave="untouch_list($event)"
-        style="background-color:#dddddd;">
-        {{names["page5"]}}
-    </div>
-    <div class="button list_choice final_choice"
-        @click="choose_list('6') ,all_other_hide($event) ,choosed_list($event)"
-        @mouseenter="touch_list($event)"
-        @mouseleave="untouch_list($event)"
-        style="background-color:#dddddd;">
-        {{names["page6"]}}
-    </div>
-    <div class="button list_choice final_choice"
-        @click="choose_list('7') ,all_other_hide($event) ,choosed_list($event)"
-        @mouseenter="touch_list($event)"
-        @mouseleave="untouch_list($event)"
-        style="background-color:#dddddd;">
-        {{names["page7"]}}
-    </div>
-    <div class="button list_choice final_choice"
-        @click="choose_list('8') ,all_other_hide($event) ,choosed_list($event)"
-        @mouseenter="touch_list($event)"
-        @mouseleave="untouch_list($event)"
-        style="background-color:#dddddd;">
-        {{names["page8"]}}
+        </details>
+        
+        <div class="button list_choice final_choice"
+            @click="choose_list('4') ,all_other_hide($event) ,choosed_list($event)">
+            {{names["page4"]}}
+        </div>
+        <div class="button list_choice final_choice"
+            @click="choose_list('5') ,all_other_hide($event) ,choosed_list($event)">
+            {{names["page5"]}}
+        </div>
+        <div class="button list_choice final_choice"
+            @click="choose_list('6') ,all_other_hide($event) ,choosed_list($event)">
+            {{names["page6"]}}
+        </div>
+        <div class="button list_choice final_choice"
+            @click="choose_list('7') ,all_other_hide($event) ,choosed_list($event)">
+            {{names["page7"]}}
+        </div>
+        <div class="button list_choice final_choice"
+            @click="choose_list('8') ,all_other_hide($event) ,choosed_list($event)">
+            {{names["page8"]}}
+        </div>
     </div>
 </template>
 
 
 <script setup>
-import {computed, reactive, ref, watch, onMounted} from "vue";
+import {computed, reactive, ref, watch, onBeforeMount} from "vue";
 
 //接收mainpage.vue丟過來的list_names
 const props = defineProps({
@@ -148,46 +119,15 @@ const props = defineProps({
         n.open = true;
     }
 
-
-//處理變色
-    //滑鼠移入選項
-    const touch_list = (n)=>{
-            //原色的狀況
-            if(n.target.style.backgroundColor==="rgb(221, 221, 221)"){
-                n.target.style.backgroundColor="#888888";
-                n.target.style.borderLeft="16px #555555 solid";
-            }
-            //藍色的狀況(被選的)
-            else if(n.target.style.backgroundColor==="rgb(153, 187, 255)"){
-                n.target.style.backgroundColor="#7799cc";
-                n.target.style.borderLeft="16px #555555 solid";
-            }
-        }
-    //滑鼠移出選項
-        const untouch_list = (n)=>{
-            //原色的狀況
-            if(n.target.style.backgroundColor==="rgb(136, 136, 136)"){
-                n.target.style.backgroundColor="#dddddd";
-                n.target.style.borderLeft="4px #888888 solid";
-            }
-            //藍色的狀況(被選的)
-            else if(n.target.style.backgroundColor==="rgb(119, 153, 204)"){
-                n.target.style.backgroundColor="#99bbff";
-            }
-        }
     //選擇的選項要變為藍色
         const choosed_list = (n)=>{
             var list_choices = document.querySelectorAll(".final_choice");
             //將所有選項改為原色
             for(let i of list_choices){
-                i.style.backgroundColor="#dddddd";
-                i.style.borderLeft="4px #888888 solid";
+                i.classList.remove("choosed_final_choice")
             }
-            n.target.style.backgroundColor="#99bbff";  //選擇的選項設為藍色
-            n.target.style.borderLeft="16px #555555 solid";  //選擇的選項左邊框加粗
+            n.target.classList.add("choosed_final_choice")
         }
-
-
 </script>
 
 
@@ -202,26 +142,32 @@ const props = defineProps({
     border-bottom:1px #bbbbbb dotted;
     border-left:4px #999999 solid;
     background-color:#dddddd;
-    display:flex;
-    align-items:center;
     white-space:nowrap;
 }
 .list_choice:hover ,.detail_1_choice:hover{
-    border-left:16px #555555 solid;
     background-color:#888888;
+    border-left:16px #555555 solid;
 }
 .summary_1:hover{
-    border-left:16px #555555 solid;
     background-color:#7755aa;
+    border-left:16px #555555 solid;
 }
 .detail_1[open] > summary{
     background-color:#ccaaff;
-    border-left:16px #222222 solid;
+    border-left:16px #8800ff solid;
 }
 .detail_1_choice{
     padding:3px 0 3px 8px;
     background-color:#dddddd;
     border-bottom:1px #bbbbbb dotted;
     border-left:4px #999999 solid;
+    white-space:nowrap;
+}
+.choosed_final_choice{
+    background-color:#99bbff;
+    border-left:16px #555555 solid;
+}
+.choosed_final_choice:hover{
+    background-color:#6688bb;
 }
 </style>

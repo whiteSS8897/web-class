@@ -1,28 +1,34 @@
 <template>
-    <loginpage v-if="keep_login === false"/>
-    <div v-if="keep_login === true">
-        <navbar @update_light="set_new_light" @list_expand="click_list_expand"
-        v-bind:choose="choose" v-bind:list_names="list_names"/>
+    <div v-if="keep_log_in === false">
+        <loginpage @check_login="handle_change_log" @get_login_user="handle_login_user" @get_login_nickname="handle_login_nickname" v-bind:_kli="keep_log_in"/>
+    </div>
+    <div v-if="keep_log_in === true">
+        <navbar @update_light="set_new_light" @list_expand="click_list_expand" @log_out="_logout" @personal_setting="open_personal_setting"
+        v-bind:choose="choose" v-bind:list_names="list_names"
+        v-bind:now_nickname="now_nickname" v-bind:now_user="now_user"/>
         <div class="box">
             <div class="list">
                 <mainlist @update="list_choose_handle" v-bind:names="list_names"/>
             </div>
             
             <div class="main_page">
-                <div v-if="choose === '1-1'"><page1_1/></div>
-                <div v-if="choose === '1-2'"><page1_2/></div>
-                <div v-if="choose === '2-1'"><page2_1/></div>
-                <div v-if="choose === '2-2'"><page2_2/></div>
-                <div v-if="choose === '3-1'"><page3_1/></div>
-                <div v-if="choose === '3-2'"><page3_2/></div>
-                <div v-if="choose === '3-3'"><page3_3/></div>
-                <div v-if="choose === '3-4'"><page3_4/></div>
-                <div v-if="choose === '3-5'"><page3_5/></div>
-                <div v-if="choose === '4'"><page4/></div>
-                <div v-if="choose === '5'"><page5/></div>
-                <div v-if="choose === '6'"><page6/></div>
-                <div v-if="choose === '7'"><page7/></div>
-                <div v-if="choose === '8'"><page8/></div>
+                <page1_1 v-if="choose === '1-1'"/>
+                <page1_2 v-if="choose === '1-2'"/>
+                <page1_3 v-if="choose === '1-3'"/>
+                <page2_1 v-if="choose === '2-1'"/>
+                <page2_2 v-if="choose === '2-2'"/>
+                <page3_1 v-if="choose === '3-1'"/>
+                <page3_2 v-if="choose === '3-2'"/>
+                <page3_3 v-if="choose === '3-3'"/>
+                <page3_4 v-if="choose === '3-4'"/>
+                <page3_5 v-if="choose === '3-5'"/>
+                <page4 v-if="choose === '4'"/>
+                <page5 v-if="choose === '5'"/>
+                <page6 v-if="choose === '6'"/>
+                <page7 v-if="choose === '7'"/>
+                <page8 v-if="choose === '8'"/>
+
+                <personal_setting v-if="choose === 'personal_setting'"/>
             </div>
         </div>
     </div>
@@ -33,6 +39,7 @@
 import {computed, reactive, ref, watch, onMounted} from "vue";
 import page1_1 from "./components/page1_1.vue";
 import page1_2 from "./components/page1_2.vue";
+import page1_3 from "./components/page1_3.vue";
 import page2_1 from "./components/page2_1.vue";
 import page2_2 from "./components/page2_2.vue";
 import page3_1 from "./components/page3_1.vue";
@@ -56,8 +63,9 @@ const set_new_light = (new_light)=>{
 
 
 import mainlist from "./components/mainlist.vue"
-const list_names = {"page1_1":"頁面1-1",
-                    "page1_2":"頁面1-2",
+const list_names = {"page1_1":"ARC 升級表",
+                    "page1_2":"AUT 升級表",
+                    "page1_3":"符文金額小算盤",
                     "page2_1":"頁面2-1",
                     "page2_2":"頁面2-2",
                     "page3_1":"頁面3-1",
@@ -65,9 +73,9 @@ const list_names = {"page1_1":"頁面1-1",
                     "page3_3":"頁面3-3",
                     "page3_4":"頁面3-4",
                     "page3_5":"頁面3-5",
-                    "page4":"頁面4",
-                    "page5":"頁面5",
-                    "page6":"頁面6",
+                    "page4":"星力★",
+                    "page5":"星火數據",
+                    "page6":"各種小算盤",
                     "page7":"頁面7",
                     "page8":"頁面8"};
 
@@ -92,7 +100,26 @@ const choose = ref("1-1")  //表示選擇清單第幾個
 
 import loginpage from "./loginpage.vue"
 
-const keep_login = ref(false);
+const keep_log_in = ref(false);
+const now_user = ref("unknown")
+const now_nickname = ref("unknown")
+const handle_change_log = (new_state)=>{
+    keep_log_in.value = new_state
+}
+const handle_login_user = (login_user)=>{
+    now_user.value = login_user
+}
+const handle_login_nickname = (login_nickname)=>{
+    now_nickname.value = login_nickname
+}
+const _logout = () =>{
+        let d = new Date()
+        keep_log_in.value = false;
+        document.cookie = "token='';expires=" + d.toGMTString();
+}
+
+import personal_setting from "./components/personal_setting.vue";
+const open_personal_setting = ()=>{choose.value = "personal_setting"}
 </script>
 
 

@@ -36,7 +36,7 @@
 <script setup>
 import {computed, reactive, ref, onMounted, watch} from "vue";
 
-import data from "/SettingConfig.json?url";
+import data from "/src/assets/SettingConfig.json";
     var _settings = reactive({});
     var _frontend = reactive({});
     onMounted(()=>{
@@ -76,7 +76,7 @@ import data from "/SettingConfig.json?url";
                                 body:JSON.stringify(_body)
 
         }
-        await fetch("http://localhost:9804/login/",requestOptions)
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/login/",requestOptions)
         .then(res =>{
             return res.text();
         })
@@ -128,8 +128,7 @@ import data from "/SettingConfig.json?url";
                                 },
                                 body:JSON.stringify(_body)
         }
-        // await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkToken/",requestOptions)
-        await fetch("http://localhost:9804/checkToken/",requestOptions)
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkToken/",requestOptions)
         .then(res =>{
             return res.text();
         })

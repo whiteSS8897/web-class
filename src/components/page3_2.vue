@@ -6,7 +6,7 @@
 
 
 <script setup>
-import {computed, reactive, ref, watch, onMounted} from "vue";
+import {computed, reactive, ref, watch, onBeforeMount} from "vue";
 </script>
 
 
