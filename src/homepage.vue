@@ -28,7 +28,7 @@
                 <page7 v-if="choose === '7'"/>
                 <page8 v-if="choose === '8'"/>
 
-                <personal_setting v-if="choose === 'personal_setting'"/>
+                <personal_setting v-if="choose === 'personal_setting'" v-bind:user_name="now_user" v-bind:nickname="now_nickname" v-bind:avatar="received_avatar"/>
             </div>
         </div>
     </div>

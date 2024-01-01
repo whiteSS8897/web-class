@@ -3,10 +3,12 @@
 		"BACKENDPORt":"9804",
 		"USERNAMe":"projectuser",
 		"PASSWORd":"projectpasswd",
-		"NETWORKTYPe":"tcp",
+		"NETWORKTYPe":"tcp"
+	},
+	"DataBase": {
 		"DBSERVERADDr":"database.jw05.nmg.cs.thu.edu.tw",
 		"DBPORt":3306,
-        "DATABASe":"web_design_class"
+		"DATABASe":"web_design_class"
 	},
 	"FrontEnd":{
 		"Hostname":"localhost",

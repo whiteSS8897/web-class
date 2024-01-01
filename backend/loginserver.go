@@ -7,94 +7,103 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/google/uuid"
 )
 
-type Setting struct {
-	BackEnd BackEndSetting `json:"Backend"`
-}
+var (
+	db           *sql.DB           // 資料庫連線全域變數
+	BACKENDPORt  string            //default 8111
+	USERNAMe     string            //"user"
+	PASSWORd     string            //"passwd"
+	NETWORKTYPe  string            //"tcp/udp"
+	DBSERVERADDr string            //"0.0.0.0"
+	DBPORt       int               //0
+	DATABASe     string            //"users...etc")
+	secretKey    = []byte("12345") // 密鑰
+)
 
-//	type BackEndSetting struct {
-//		BackendPort string `json:"BACKENDPORT"`
-//		UserName    string `json:"USERNAME"`
-//		PassWord    string `json:"PASSWORD"`
-//		NetWorkType string `json:"NETWORKTYPE"`
-//		DB          DatabaseConfig
-//	}
-type BackEndSetting struct {
-	BackendPort  string `json:"BACKENDPORT"`
-	UserName     string `json:"USERNAME"`
-	PassWord     string `json:"PASSWORD"`
-	NetWorkType  string `json:"NETWORKTYPE"`
-	DBServerAddr string `json:"DBSERVERADDR"`
-	DBPort       int    `json:"DBPORT"`
-	DataBase     string `json:"DATABASE"`
-}
-
-// type DatabaseConfig struct {
-// 	DBServerAddr string `json:"DBSERVERADDR"`
-// 	DBPort       int    `json:"DBPORT"`
-// 	DataBase     string `json:"DATABASE"`
-// }
-
-type Account struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-type Token_btof struct {
-	AccessToken string
-	Signature   string
-}
-
-type Token_ftob struct {
-	Token string `json:"token"`
-}
-
-var BACKENDPORt string  //default 8111
-var USERNAMe string     //"user"
-var PASSWORd string     //"passwd"
-var NETWORKTYPe string  //"tcp/udp"
-var DBSERVERADDr string //"0.0.0.0"
-var DBPORt int          //0
-var DATABASe string     //"users...etc"
-
-var secretKey = []byte("12345") // 密鑰
-
+// 初始設定
 func setTheConstDefault() {
-	fmt.Println("[starting] start to set up const..")
-	//讀取設定檔(json file)
-	jsonFile, err := os.Open("../public/SettingConfig.json")
+	jsonFile, err := os.Open("../src/assets/SettingConfig.json")
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println("[starting] 成功開啟json設定檔，讀取中請稍後...")
 	defer jsonFile.Close()
-
-	byteValue, _ := os.ReadFile("../public/SettingConfig.json")
+	byteValue, _ := os.ReadFile("../src/assets/SettingConfig.json")
 	var setting Setting
 	json.Unmarshal(byteValue, &setting)
-
 	BACKENDPORt = setting.BackEnd.BackendPort
 	USERNAMe = setting.BackEnd.UserName
 	PASSWORd = setting.BackEnd.PassWord
 	NETWORKTYPe = setting.BackEnd.NetWorkType
-	DBSERVERADDr = setting.BackEnd.DBServerAddr
-	DBPORt = int(setting.BackEnd.DBPort)
-	DATABASe = setting.BackEnd.DataBase
+	DBSERVERADDr = setting.DB.DBServerAddr
+	DBPORt = int(setting.DB.DBPort)
+	DATABASe = setting.DB.DataBase
 	fmt.Println("[starting] const set up done!")
 }
+func Signup(c *gin.Context) {
+	account := Account{}
+	c.BindJSON(&account)
+	fmt.Printf("%v", &account)
+	c.JSON(http.StatusOK, gin.H{
+		"username": account.Username,
+		"password": account.Password,
+	})
+	fmt.Printf("usernam=%s   ,password=%s \n", account.Username, account.Password)
+	// 檢查帳號是否存在
+	var count int
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", account.Username).Scan(&count)
+	if err != nil {
+		fmt.Println("DB Query error")
+		fmt.Println(err)
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
+		return
+	}
 
-var db *sql.DB // 資料庫連線全域變數
+	if count > 0 {
+		// 帳號存在回報錯誤
+		fmt.Println("Username already exists")
+		c.JSON(http.StatusConflict, gin.H{"message": "Username already exists"})
+		return
+	}
+	// 生成UUID作為鹽值
+	salt := uuid.New().String()
+
+	// 將密碼與鹽值做hash
+	passwordWithSalt := account.Password + salt
+	hash := sha256.Sum256([]byte(passwordWithSalt))
+	hashString := strings.ToLower(fmt.Sprintf("%x", hash))
+
+	// 將帳號、hash後的密碼、鹽值存入資料庫
+	_, err = db.Exec("INSERT INTO users (user_acc, user_psw_hash, user_psw_salt) VALUES (?, ?, ?, ?)", account.Username, hashString, salt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to insert into users table", "error": err.Error()})
+		return
+	}
+
+	_, err = db.Exec("INSERT INTO usersdata (username, nickname) VALUES(?, ?, ?)", account.Username, account.Username)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to insert into usersdata table", "error": err.Error()})
+		return
+	}
+
+	// User created successfully
+	c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
+}
 
 func CheckIdentity(c *gin.Context) {
 	account := Account{}
@@ -385,29 +394,170 @@ func saveNewNicknameToDatabase(username, newNickname string) error {
 	if err != nil {
 		return err
 	}
+	fmt.Println("run here")
 	return nil
 }
+func CheckImage(c *gin.Context) {
+	var request struct {
+		Username string `json:"userName"`
+	}
+	if err := c.BindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Println("username:", request.Username)
 
-func main() {
-	setTheConstDefault()
+	profile, err := getProfile(request.Username)
+	if err != nil {
+		fmt.Printf("error retrieving nickname: %v", err)
+		if err.Error() == "Null image" {
+			c.JSON(http.StatusOK, gin.H{"profile": "Null image"})
+		} else {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Internal Server Error"})
+		}
+		return
+	}
+	// fmt.Print(profile)
+	c.JSON(http.StatusOK, gin.H{"profile": profile})
+}
+
+func GetImage(c *gin.Context) {
+
+	form := c.Request.MultipartForm
+	defer form.RemoveAll()
+
+	userName := c.PostForm("userName")       // 取得使用者名稱做後續檔案儲存的檔名
+	newFilename := userName + "_profile.jpg" // 設定檔案名格式
+	uploadPath := "./user_profile/"          // 檔案存放路徑
+
+	in, header, err := c.Request.FormFile("image")
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save the file"})
+		return
+	}
+	defer in.Close()
+
+	header.Filename = newFilename
+	out, err := os.Create(uploadPath + header.Filename)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save the file"})
+		return
+	}
+	defer out.Close()
+
+	io.Copy(out, in) // 將in的檔案copy到out檔案
+
+	fmt.Println("File saved successfully") // 測試成功的訊息 之後可註解掉
+	fullpath := filepath.Join(uploadPath, newFilename)
+	_, err = db.Exec("UPDATE usersdata SET profile_image = ? WHERE username = ?", fullpath, userName)
+	if err != nil {
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "File updated and saved successfully"})
+
+}
+
+func getProfile(username string) (Response, error) {
+	// 在這裡執行查詢，獲取使用者圖片路徑
+	var profilePath sql.NullString
+	err := db.QueryRow("SELECT profile_image FROM usersdata WHERE username=?", username).Scan(&profilePath)
+	if err != nil {
+		return Response{}, err
+	}
+
+	if !profilePath.Valid {
+		return Response{}, errors.New("Null image")
+	}
+
+	// 讀取圖片文件
+	imageFile, err := os.Open(profilePath.String)
+	if err != nil {
+		return Response{}, err
+	}
+	defer imageFile.Close()
+
+	// 獲取圖片文件的大小
+	imageStat, err := imageFile.Stat()
+	if err != nil {
+		return Response{}, err
+	}
+	imageSize := imageStat.Size()
+
+	// 讀取圖片文件的數據
+	imageData := make([]byte, imageSize)
+	_, err = imageFile.Read(imageData)
+	if err != nil {
+		return Response{}, err
+	}
+
+	// 使用 createBlobURL 函數來創建 Blob URL
+	blobURL, err := createBlobURL(imageData)
+	if err != nil {
+		return Response{}, err
+	}
+	return Response{Imagebase64: blobURL}, nil
+}
+
+func createBlobURL(imageData []byte) (string, error) {
+	// 將圖像數據 Base64 編碼
+	base64Data := base64.StdEncoding.EncodeToString(imageData)
+	fmt.Println(base64Data)
+	// 創建 Blob URL
+	return base64Data, nil
+}
+
+func SavePriceData(c *gin.Context) {
+	var pricedata PriceData
+	if err := c.BindJSON(&pricedata); err != nil {
+		// 處理錯誤
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	// testing
+	vanishingJourney := pricedata.VanishingJourney
+	fmt.Printf("Vanishing_Journey First: %d, Last: %d\n", vanishingJourney.First, vanishingJourney.Last)
+}
+
+func getPriceData(username string) (string, error) {
+	var pricesData string
+
+	err := db.QueryRow("SELECT prices_data FROM usersdata WHERE username = ?", username).Scan(&pricesData)
+	if err != nil {
+		return "", err
+	}
+
+	return pricesData, nil
+}
+
+// 初始化資料庫連接
+func initDB() {
 	var err error
 	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@%s(%s:%d)/%s", USERNAMe, PASSWORd, NETWORKTYPe, DBSERVERADDr, DBPORt, DATABASe))
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+}
 
+// 執行伺服器
+func runServer() {
 	router := gin.Default()
-
 	// 配置 CORS
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
 	router.Use(cors.New(corsConfig))
-
 	// 添加路由和對應函數
+	router.POST("/signup/", Signup)
 	router.POST("/login/", CheckIdentity)
 	router.POST("/checkToken/", CheckToken)
 	router.POST("/updateNickname/", UpdateNickname)
+	router.POST("/getImage/", GetImage)
 	router.Run(":" + BACKENDPORt)
+}
 
+func main() {
+	setTheConstDefault()
+	initDB()
+	runServer()
 }

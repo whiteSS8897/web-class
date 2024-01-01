@@ -73,6 +73,7 @@ import data from "/SettingConfig.json?url";
     const emit = defineEmits(["re_check","update_avatar"])
     const update_nickname = async (new_nickname) =>{
         const _body = {"userName":now_user.value,"newNickname":new_nickname}
+        console.log(now_user.value)
         console.log(JSON.stringify(_body))
         const requestOptions = {
                                 method:"POST",
@@ -81,7 +82,7 @@ import data from "/SettingConfig.json?url";
                                 },
                                 body:JSON.stringify(_body)
         }
-        await fetch("http://"+_frontend["HOSTNAMe"]+":"+_frontend["LoginBackEndPort"]+"/updateNickname/",requestOptions)
+        await fetch("http://localhost:9804/updateNickname/",requestOptions)
         .then(res =>{
             return res.text();
         })
