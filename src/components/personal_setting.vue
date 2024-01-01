@@ -41,7 +41,7 @@
 
 <script setup>
 import {computed, reactive, ref, onBeforeMount, onMounted, onBeforeUpdate, onUpdated, watch} from "vue";
-import data from "/SettingConfig.json?url";
+import data from "/src/assets/SettingConfig.json";
 
     var _settings = reactive({});
     var _frontend = reactive({});
@@ -137,7 +137,7 @@ import data from "/SettingConfig.json?url";
 
 
 
-        await fetch("http://"+_frontend["HOSTNAMe"]+":"+_frontend["LoginBackEndPort"]+"/getImage/",requestOptions)
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getImage/",requestOptions)
         .then(res =>{
             return res.text();
         })

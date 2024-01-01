@@ -5,7 +5,7 @@
     <div v-if="keep_log_in === true">
         <navbar @update_light="set_new_light" @list_expand="click_list_expand" @log_out="_logout" @personal_setting="open_personal_setting"
         v-bind:choose="choose" v-bind:list_names="list_names"
-        v-bind:now_nickname="now_nickname" v-bind:now_user="now_user"/>
+        v-bind:now_nickname="now_nickname" v-bind:now_user="now_user" v-bind:avatar="received_avatar"/>
         <div class="box">
             <div class="list">
                 <mainlist @update="list_choose_handle" v-bind:names="list_names"/>
@@ -28,7 +28,9 @@
                 <page7 v-if="choose === '7'"/>
                 <page8 v-if="choose === '8'"/>
 
-                <personal_setting v-if="choose === 'personal_setting'" v-bind:user_name="now_user" v-bind:nickname="now_nickname" v-bind:avatar="received_avatar"/>
+                <personal_setting v-if="choose === 'personal_setting'"
+                v-bind:user_name="now_user" v-bind:nickname="now_nickname" v-bind:avatar="received_avatar"
+                @re_check="_check"/>
             </div>
         </div>
     </div>
@@ -52,6 +54,16 @@ import page5 from "./components/page5.vue";
 import page6 from "./components/page6.vue";
 import page7 from "./components/page7.vue";
 import page8 from "./components/page8.vue";
+
+
+import data from "/src/assets/SettingConfig.json";
+var _settings = reactive({});
+var _frontend = reactive({});
+onMounted(()=>{
+    _settings = data;
+    _frontend = _settings["FrontEnd"]
+    _check();
+});
 
 
 import navbar from "./components/navbar.vue"
@@ -120,6 +132,108 @@ const _logout = () =>{
 
 import personal_setting from "./components/personal_setting.vue";
 const open_personal_setting = ()=>{choose.value = "personal_setting"}
+
+
+
+function getCookie(name) {
+        const temp = `; ${document.cookie}`;
+        console.log(temp)
+        const parts = temp.split(`; ${name}=`);
+        console.log(parts)
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        else return ''
+    }
+const _check = async () =>{
+        let check_token = getCookie("token")
+        console.log(check_token)
+        const _body = {"token":check_token}
+        const requestOptions = {
+                                method:"POST",
+                                headers:{
+                                    "Content-Type": "application/json"
+                                },
+                                body:JSON.stringify(_body)
+        }
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkToken/",requestOptions)
+        .then(res =>{
+            return res.text();
+        })
+        .then(res =>{
+            return res.substring(JSON.stringify(_body).length);
+        })
+        .then(res =>{
+            return JSON.parse(res);
+        })
+        .then(res =>{
+            console.log(res);
+            if (res["message"] === "Token is valid"){
+                //console.log(keep_log_in.value)
+                keep_log_in.value = true
+                now_user.value = res["username"]
+                now_nickname.value = res["nickname"]
+                get_image();
+                console.log("username:",now_user.value)
+                console.log("nickname:",now_nickname.value)
+
+                //console.log(keep_log_in.value)
+            }
+            else{
+                //console.log(keep_log_in.value)
+                keep_log_in.value = false
+                //console.log(keep_log_in.value)
+            }
+        })
+    }
+
+    const received_avatar = ref();
+    const get_image = async () =>{
+        const _body = {"userName":now_user.value}
+        console.log(JSON.stringify(_body))
+        const requestOptions = {
+                                method:"POST",
+                                headers:{
+                                    "Content-Type": "application/json"
+                                },
+                                body:JSON.stringify(_body)
+        }
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getImage/",requestOptions)
+        .then(res =>{
+            return res.json();
+        })
+        // .then(res =>{
+        //     return JSON.stringify(res);
+        // })
+        .then(res =>{
+            received_avatar.value = res[""];
+            const imageBase64 = res;
+            // console.log(res["profile"]);
+            // console.log(imageBase64.profile.Imagebase64);
+            
+            // console.log(objectURL);
+            if (res["profile"] === "Null image"){
+                received_avatar.value = "https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa"
+                console.log("Null image")
+            }
+            else {
+                const byteString = atob(imageBase64.profile.Imagebase64);
+
+                const ab = new ArrayBuffer(byteString.length);
+                const ia = new Uint8Array(ab);
+                for (let i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+                const blob = new Blob([ab]);
+                const objectURL = URL.createObjectURL(blob);
+                received_avatar.value = objectURL
+            }
+            console.log(received_avatar.value)
+        })
+        .catch(()=>{
+            received_avatar.value = "https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa"
+            console.log("fail to get image")
+        })
+
+    }
 </script>
 
 

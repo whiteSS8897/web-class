@@ -49,18 +49,13 @@
             </div>
             
             <!-- 亮度數值框 -->
-            <div style="width:58px; margin-right:50px;">
-                <v-text-field
-                v-model="light"
-                hide-details
-                density="compact"/>
-            </div>
+            <input type=number style="width:56px; font-size:20px;" v-model="light">
             
             <!-- 使用者(整體) -->
             <div class="button user navbar_button" @click="open_personal_setting">
                     <!-- 使用者icon -->
                 <div class="user_icon">
-                    <img src="https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa" width="26" height="26">
+                    <img v-bind:src="avatar" width="26" height="26">
                 </div>
                     {{ now_nickname }}
             </div>
@@ -92,6 +87,7 @@ const props = defineProps({
     list_names:{},
     now_nickname:{},
     now_user:{},
+    avatar:{}
 })
 
 const _logout = ()=>{emit("log_out")}
