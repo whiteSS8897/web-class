@@ -1,6 +1,8 @@
 <template>
     <div v-if="keep_log_in === false">
-        <loginpage @check_login="handle_change_log" @get_login_user="handle_login_user" @get_login_nickname="handle_login_nickname" v-bind:_kli="keep_log_in"/>
+        <loginpage
+        @check_login="handle_change_log" @get_login_user="handle_login_user" @get_login_nickname="handle_login_nickname"
+        v-bind:_kli="keep_log_in"/>
     </div>
     <div v-if="keep_log_in === true">
         <navbar @update_light="set_new_light" @list_expand="click_list_expand" @log_out="_logout" @personal_setting="open_personal_setting"
@@ -134,7 +136,6 @@ import personal_setting from "./components/personal_setting.vue";
 const open_personal_setting = ()=>{choose.value = "personal_setting"}
 
 
-
 function getCookie(name) {
         const temp = `; ${document.cookie}`;
         console.log(temp)
@@ -185,55 +186,55 @@ const _check = async () =>{
         })
     }
 
-    const received_avatar = ref();
-    const get_image = async () =>{
-        const _body = {"userName":now_user.value}
-        console.log(JSON.stringify(_body))
-        const requestOptions = {
-                                method:"POST",
-                                headers:{
-                                    "Content-Type": "application/json"
-                                },
-                                body:JSON.stringify(_body)
-        }
-        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getImage/",requestOptions)
-        .then(res =>{
-            return res.json();
-        })
-        // .then(res =>{
-        //     return JSON.stringify(res);
-        // })
-        .then(res =>{
-            received_avatar.value = res[""];
-            const imageBase64 = res;
-            // console.log(res["profile"]);
-            // console.log(imageBase64.profile.Imagebase64);
-            
-            // console.log(objectURL);
-            if (res["profile"] === "Null image"){
-                received_avatar.value = "https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa"
-                console.log("Null image")
-            }
-            else {
-                const byteString = atob(imageBase64.profile.Imagebase64);
-
-                const ab = new ArrayBuffer(byteString.length);
-                const ia = new Uint8Array(ab);
-                for (let i = 0; i < byteString.length; i++) {
-                    ia[i] = byteString.charCodeAt(i);
-                }
-                const blob = new Blob([ab]);
-                const objectURL = URL.createObjectURL(blob);
-                received_avatar.value = objectURL
-            }
-            console.log(received_avatar.value)
-        })
-        .catch(()=>{
-            received_avatar.value = "https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa"
-            console.log("fail to get image")
-        })
-
+const received_avatar = ref();
+const get_image = async () =>{
+    const _body = {"userName":now_user.value}
+    console.log(JSON.stringify(_body))
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
     }
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getImage/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    // .then(res =>{
+    //     return JSON.stringify(res);
+    // })
+    .then(res =>{
+        received_avatar.value = res[""];
+        const imageBase64 = res;
+        // console.log(res["profile"]);
+        // console.log(imageBase64.profile.Imagebase64);
+        
+        // console.log(objectURL);
+        if (res["profile"] === "Null image"){
+            received_avatar.value = "https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa"
+            console.log("Null image")
+        }
+        else {
+            const byteString = atob(imageBase64.profile.Imagebase64);
+
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([ab]);
+            const objectURL = URL.createObjectURL(blob);
+            received_avatar.value = objectURL
+        }
+        console.log(received_avatar.value)
+    })
+    .catch(()=>{
+        received_avatar.value = "https://api.iconify.design/svg-spinners:6-dots-rotate.svg?color=%23aaaaaa"
+        console.log("fail to get image")
+    })
+
+}
 </script>
 
 
