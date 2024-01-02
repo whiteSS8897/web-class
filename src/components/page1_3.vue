@@ -370,7 +370,7 @@ const _now_user = computed(()=>{
         return props.user_name
     })
 const save_data = async ()=>{
-    const _body = {"userName":_now_user.value,
+    const priceData = {
                     "Vanishing_Journey":{"start":Vanishing_Journey_begin.value,"end":Vanishing_Journey_end.value},
                     "Chu_Chu_Island":{"start":Chu_Chu_Island_begin.value,"end":Chu_Chu_Island_end.value},
                     "Lachelein":{"start":Lachelein_begin.value,"end":Lachelein_end.value},
@@ -383,6 +383,10 @@ const save_data = async ()=>{
                     "Shangri_La":{"start":Shangri_La_begin.value,"end":Shangri_La_end.value},
                     "Arteria":{"start":Arteria_begin.value,"end":Arteria_end.value},
                     "Carcion":{"start":Carcion_begin.value,"end":Carcion_end.value}}
+    const _body = {
+        "userName": _now_user.value,
+        "pricedata": priceData
+    }
     const requestOptions = {
                             method:"POST",
                             headers:{

@@ -509,27 +509,30 @@ func createBlobURL(imageData []byte) (string, error) {
 
 // 獲取PriceData
 func SavePriceData(c *gin.Context) {
-	var pricedata PriceData
-	if err := c.BindJSON(&pricedata); err != nil {
+	type RequestData struct {
+		Username  string    `json:"userName"`
+		PriceData PriceData `json:"PriceData"`
+	}
+	var requestData RequestData
+	if err := c.BindJSON(&requestData); err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	var request struct {
-		Username string `json:"userName"`
-	}
-	if err := c.BindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	jsonData, err := json.Marshal(pricedata)
+	jsonData, err := json.Marshal(requestData.PriceData)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	fmt.Println(string(jsonData))
-	_, err = db.Exec("UPDATE usersdata SET prices_data = ? WHERE username = ?", string(jsonData), request.Username)
+	if err != nil {
+		// 錯誤處理
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Println(string(jsonData))
+	_, err = db.Exec("UPDATE usersdata SET prices_data = ? WHERE username = ?", string(jsonData), requestData.Username)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(500, gin.H{"error": "Failed to update prices_data"})
@@ -558,27 +561,24 @@ func GetPricesData(c *gin.Context) {
 }
 
 func SaveStarForceData(c *gin.Context) {
-	var starforcedata StarForceData
-	if err := c.BindJSON(&starforcedata); err != nil {
+	type RequestData struct {
+		UserName      string        `json:"userName"`
+		StarForceData StarForceData `json:"starForceData"`
+	}
+	var requestData RequestData
+	if err := c.BindJSON(&requestData); err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	var request struct {
-		Username string `json:"userName"`
-	}
-	if err := c.BindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	jsonData, err := json.Marshal(starforcedata)
+	jsonData, err := json.Marshal(requestData.StarForceData)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	fmt.Println(string(jsonData))
-	_, err = db.Exec("UPDATE usersdata SET starforce_data = ? WHERE username = ?", string(jsonData), request.Username)
+	_, err = db.Exec("UPDATE usersdata SET starforce_data = ? WHERE username = ?", string(jsonData), requestData.UserName)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(500, gin.H{"error": "Failed to update starforce_data"})
@@ -607,27 +607,24 @@ func GetStarForceData(c *gin.Context) {
 }
 
 func SaveBonusStatData(c *gin.Context) {
-	var bonusstatdata BonusStatData
-	if err := c.BindJSON(&bonusstatdata); err != nil {
+	type RequestData struct {
+		UserName      string        `json:"userName"`
+		BonusStatData BonusStatData `json:"bonusStatData"`
+	}
+	var requestData RequestData
+	if err := c.BindJSON(&requestData); err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	var request struct {
-		Username string `json:"userName"`
-	}
-	if err := c.BindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	jsonData, err := json.Marshal(bonusstatdata)
+	jsonData, err := json.Marshal(requestData.BonusStatData)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	fmt.Println(string(jsonData))
-	_, err = db.Exec("UPDATE usersdata SET bonusstat_data = ? WHERE username = ?", string(jsonData), request.Username)
+	_, err = db.Exec("UPDATE usersdata SET bonusstat_data = ? WHERE username = ?", string(jsonData), requestData.UserName)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(500, gin.H{"error": "Failed to update bonusstat_data"})
@@ -656,27 +653,24 @@ func GetBonusStatData(c *gin.Context) {
 }
 
 func SaveCalculatorData(c *gin.Context) {
-	var calculatordata CalculatorData
-	if err := c.BindJSON(&calculatordata); err != nil {
+	type RequestData struct {
+		UserName       string         `json:"userName"`
+		CalculatorData CalculatorData `json:"calculatorData"`
+	}
+	var requestData RequestData
+	if err := c.BindJSON(&requestData); err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	var request struct {
-		Username string `json:"userName"`
-	}
-	if err := c.BindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	jsonData, err := json.Marshal(calculatordata)
+	jsonData, err := json.Marshal(requestData.CalculatorData)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 	fmt.Println(string(jsonData))
-	_, err = db.Exec("UPDATE usersdata SET calculator_data = ? WHERE username = ?", string(jsonData), request.Username)
+	_, err = db.Exec("UPDATE usersdata SET calculator_data = ? WHERE username = ?", string(jsonData), requestData.UserName)
 	if err != nil {
 		// 錯誤處理
 		c.JSON(500, gin.H{"error": "Failed to update calculator_data"})
