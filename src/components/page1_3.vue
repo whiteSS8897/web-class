@@ -365,18 +365,18 @@ onMounted(()=>{
 });
 
 const save_data = async ()=>{
-    const _body = {"Vanishing_Journey":{"First":Vanishing_Journey_begin.value,"Last":Vanishing_Journey_end.value},
-                    "Chu_Chu_Island":{"First":Chu_Chu_Island_begin.value,"Last":Chu_Chu_Island_end.value},
-                    "Lachelein":{"First":Lachelein_begin.value,"Last":Lachelein_end.value},
-                    "Arcana":{"First":Arcana_begin.value,"Last":Arcana_end.value},
-                    "Morass":{"First":Morass_begin.value,"Last":Morass_end.value},
-                    "Esfera":{"First":Esfera_begin.value,"Last":Esfera_end.value},
-                    "Cernium":{"First":Cernium_begin.value,"Last":Cernium_end.value},
-                    "Arcus":{"First":Arcus_begin.value,"Last":Arcus_end.value},
-                    "Odium":{"First":Odium_begin.value,"Last":Odium_end.value},
-                    "Shangri_La":{"First":Shangri_La_begin.value,"Last":Shangri_La_end.value},
-                    "Arteria":{"First":Arteria_begin.value,"Last":Arteria_end.value},
-                    "Carcion":{"First":Carcion_begin.value,"Last":Carcion_end.value}}
+    const _body = {"Vanishing_Journey":{"Start":Vanishing_Journey_begin.value,"End":Vanishing_Journey_end.value},
+                    "Chu_Chu_Island":{"Start":Chu_Chu_Island_begin.value,"End":Chu_Chu_Island_end.value},
+                    "Lachelein":{"Start":Lachelein_begin.value,"End":Lachelein_end.value},
+                    "Arcana":{"Start":Arcana_begin.value,"End":Arcana_end.value},
+                    "Morass":{"Start":Morass_begin.value,"End":Morass_end.value},
+                    "Esfera":{"Start":Esfera_begin.value,"End":Esfera_end.value},
+                    "Cernium":{"Start":Cernium_begin.value,"End":Cernium_end.value},
+                    "Arcus":{"Start":Arcus_begin.value,"End":Arcus_end.value},
+                    "Odium":{"Start":Odium_begin.value,"End":Odium_end.value},
+                    "Shangri_La":{"Start":Shangri_La_begin.value,"End":Shangri_La_end.value},
+                    "Arteria":{"Start":Arteria_begin.value,"End":Arteria_end.value},
+                    "Carcion":{"Start":Carcion_begin.value,"End":Carcion_end.value}}
         const requestOptions = {
                                 method:"POST",
                                 headers:{

@@ -98,39 +98,21 @@ type PriceData struct {
 }
 
 type StarForceData struct {
-	Range128_137 State `json:"128~137"`
-	Range138_149 State `json:"138~149"`
-	Range150_159 State `json:"150~159"`
-	Range160_199 State `json:"160~199"`
-	Range200_249 State `json:"200~249"`
-	Range250     State `json:"250"`
-}
-
-type State struct {
-	Weapon    Range `json:"weapon"`
-	NonWeapon Range `json:"non_weapon"`
+	Scope    string `json:"Scope"`
+	Range    Range  `json:"Range"`
+	IsWeapon bool   `json:"IsWeapon"`
 }
 
 type Range struct {
-	First int `json:"First"`
-	Last  int `json:"Last"`
+	Start int `json:"start"`
+	End   int `json:"end"`
 }
 
 // 星火數據
-type StarData struct {
-	SearchData SearchData `json:"searchData"`
-	WeaponData WeaponData `json:"weaponData"`
-}
-
-type SearchData struct {
-	SearchAsScope bool `json:"searchAsScope"`
-	ScopeChoosed  int  `json:"scopeChoosed"`
-	Level         int  `json:"level"`
-}
-
-type WeaponData struct {
-	InputAttack int `json:"inputAttack"`
-	InputTier   int `json:"inputTier"`
+type BonusStatData struct {
+	Level     int    `json:"level"`
+	WeaponATT int    `json:"weaponATT"`
+	Tier      string `json:"Tier"`
 }
 
 // 各種小算盤的JSON結構
