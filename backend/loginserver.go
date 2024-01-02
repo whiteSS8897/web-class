@@ -66,7 +66,7 @@ func Signup(c *gin.Context) {
 	fmt.Printf("usernam=%s   ,password=%s \n", account.Username, account.Password)
 	// 檢查帳號是否存在
 	var count int
-	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE username = ?", account.Username).Scan(&count)
+	err := db.QueryRow("SELECT COUNT(*) FROM users WHERE user_acc = ?", account.Username).Scan(&count)
 	if err != nil {
 		fmt.Println("DB Query error")
 		fmt.Println(err)
@@ -89,13 +89,13 @@ func Signup(c *gin.Context) {
 	hashString := strings.ToLower(fmt.Sprintf("%x", hash))
 
 	// 將帳號、hash後的密碼、鹽值存入資料庫
-	_, err = db.Exec("INSERT INTO users (user_acc, user_psw_hash, user_psw_salt) VALUES (?, ?, ?, ?)", account.Username, hashString, salt)
+	_, err = db.Exec("INSERT INTO users (user_acc, user_psw_hash, user_psw_salt) VALUES (?, ?, ?)", account.Username, hashString, salt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to insert into users table", "error": err.Error()})
 		return
 	}
 
-	_, err = db.Exec("INSERT INTO usersdata (username, nickname) VALUES(?, ?, ?)", account.Username, account.Username)
+	_, err = db.Exec("INSERT INTO usersdata (username, nickname) VALUES(?, ?)", account.Username, account.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to insert into usersdata table", "error": err.Error()})
 		return
@@ -553,6 +553,8 @@ func runServer() {
 	router.POST("/checkToken/", CheckToken)
 	router.POST("/updateNickname/", UpdateNickname)
 	router.POST("/getImage/", GetImage)
+	router.POST("/checkImage/", CheckImage)
+	router.POST("/savePriceData/", SavePriceData)
 	router.Run(":" + BACKENDPORt)
 }
 

@@ -1,176 +1,181 @@
 <template>
-    <table style="display:contents;">
-        <th>符文</th>
-        <th>幾等到幾等</th>
-        <th>顆數</th>
-        <th>金額</th>
-        <tr>
-            <td><div class="choice_label">消逝的旅途<img src="/src/assets/imgs/消逝的旅途.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Vanishing_Journey_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Vanishing_Journey_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Vanishing_Journey_begin-1,Vanishing_Journey_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Vanishing_Journey']).slice(Vanishing_Journey_begin-1,Vanishing_Journey_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">啾啾愛爾蘭<img src="/src/assets/imgs/啾啾愛爾蘭.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Chu_Chu_Island_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Chu_Chu_Island_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Chu_Chu_Island_begin-1,Chu_Chu_Island_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Chu_Chu_Island']).slice(Chu_Chu_Island_begin-1,Chu_Chu_Island_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">拉契爾恩<img src="/src/assets/imgs/拉契爾恩.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Lachelein_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Lachelein_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Lachelein_begin-1,Lachelein_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Lachelein']).slice(Lachelein_begin-1,Lachelein_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">阿爾卡娜<img src="/src/assets/imgs/阿爾卡娜.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Arcana_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Arcana_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Arcana_begin-1,Arcana_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Arcana']).slice(Arcana_begin-1,Arcana_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">魔菈斯<img src="/src/assets/imgs/魔菈斯.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Morass_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Morass_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Morass_begin-1,Morass_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Morass']).slice(Morass_begin-1,Morass_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">艾斯佩拉<img src="/src/assets/imgs/艾斯佩拉.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Esfera_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Esfera_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Esfera_begin-1,Esfera_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Esfera']).slice(Esfera_begin-1,Esfera_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">賽爾尼溫<img src="/src/assets/imgs/賽爾尼溫.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Cernium_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Cernium_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Cernium_begin-1,Cernium_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Cernium']).slice(Cernium_begin-1,Cernium_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">阿爾克斯<img src="/src/assets/imgs/阿爾克斯.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Arcus_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Arcus_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Arcus_begin-1,Arcus_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Arcus']).slice(Arcus_begin-1,Arcus_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">奧迪溫<img src="/src/assets/imgs/奧迪溫.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Odium_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Odium_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Odium_begin-1,Odium_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Odium']).slice(Odium_begin-1,Odium_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">桃園境<img src="/src/assets/imgs/桃園境.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Shangri_La_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Shangri_La_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Shangri_La_begin-1,Shangri_La_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Shangri_La']).slice(Shangri_La_begin-1,Shangri_La_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">阿爾特利亞<img src="/src/assets/imgs/阿爾特利亞.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Arteria_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Arteria_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Arteria_begin-1,Arteria_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Arteria']).slice(Arteria_begin-1,Arteria_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td><div class="choice_label">卡爾西溫<img src="/src/assets/imgs/卡爾西溫.png" class="symbol_img"></div></td>
-            <td>
-                <div class="input_level_area">
-                    <input type=number class="input_level" v-model="Carcion_begin">
-                    <div style="font-size:24px;">～</div>
-                    <input type=number class="input_level" v-model="Carcion_end">
-                </div>
-            </td>
-            <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Carcion_begin-1,Carcion_end-1)) }}</td>
-            <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Carcion']).slice(Carcion_begin-1,Carcion_end-1))) }}</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="total_cost total_cost_head">總金額</td>
-            <td style="text-align:end;" class="total_cost">{{ formatNumber(
-                Sum_of_Nums(Object.values(arc_prices['Vanishing_Journey']).slice(Vanishing_Journey_begin-1,Vanishing_Journey_end-1))+
-                Sum_of_Nums(Object.values(arc_prices['Chu_Chu_Island']).slice(Chu_Chu_Island_begin-1,Chu_Chu_Island_end-1))+
-                Sum_of_Nums(Object.values(arc_prices['Lachelein']).slice(Lachelein_begin-1,Lachelein_end-1))+
-                Sum_of_Nums(Object.values(arc_prices['Arcana']).slice(Arcana_begin-1,Arcana_end-1))+
-                Sum_of_Nums(Object.values(arc_prices['Morass']).slice(Morass_begin-1,Morass_end-1))+
-                Sum_of_Nums(Object.values(arc_prices['Esfera']).slice(Esfera_begin-1,Esfera_end-1))+
-                Sum_of_Nums(Object.values(aut_prices['Cernium']).slice(Cernium_begin-1,Cernium_end-1))+
-                Sum_of_Nums(Object.values(aut_prices['Arcus']).slice(Arcus_begin-1,Arcus_end-1))+
-                Sum_of_Nums(Object.values(aut_prices['Odium']).slice(Odium_begin-1,Odium_end-1))+
-                Sum_of_Nums(Object.values(aut_prices['Shangri_La']).slice(Shangri_La_begin-1,Shangri_La_end-1))+
-                Sum_of_Nums(Object.values(aut_prices['Arteria']).slice(Arteria_begin-1,Arteria_end-1))+
-                Sum_of_Nums(Object.values(aut_prices['Carcion']).slice(Carcion_begin-1,Carcion_end-1))
-                ) }}</td>
-        </tr>
-    </table>
+    <div style="display:flex; align-items:start;">
+        <table style="display:block;">
+            <th>符文</th>
+            <th>幾等到幾等</th>
+            <th>顆數</th>
+            <th>金額</th>
+            <tr>
+                <td><div class="choice_label">消逝的旅途<img src="/src/assets/imgs/消逝的旅途.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Vanishing_Journey_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Vanishing_Journey_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Vanishing_Journey_begin-1,Vanishing_Journey_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Vanishing_Journey']).slice(Vanishing_Journey_begin-1,Vanishing_Journey_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">啾啾愛爾蘭<img src="/src/assets/imgs/啾啾愛爾蘭.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Chu_Chu_Island_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Chu_Chu_Island_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Chu_Chu_Island_begin-1,Chu_Chu_Island_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Chu_Chu_Island']).slice(Chu_Chu_Island_begin-1,Chu_Chu_Island_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">拉契爾恩<img src="/src/assets/imgs/拉契爾恩.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Lachelein_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Lachelein_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Lachelein_begin-1,Lachelein_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Lachelein']).slice(Lachelein_begin-1,Lachelein_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">阿爾卡娜<img src="/src/assets/imgs/阿爾卡娜.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Arcana_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Arcana_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Arcana_begin-1,Arcana_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Arcana']).slice(Arcana_begin-1,Arcana_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">魔菈斯<img src="/src/assets/imgs/魔菈斯.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Morass_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Morass_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Morass_begin-1,Morass_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Morass']).slice(Morass_begin-1,Morass_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">艾斯佩拉<img src="/src/assets/imgs/艾斯佩拉.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Esfera_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Esfera_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(arc_demand['Demand']).slice(Esfera_begin-1,Esfera_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(arc_prices['Esfera']).slice(Esfera_begin-1,Esfera_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">賽爾尼溫<img src="/src/assets/imgs/賽爾尼溫.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Cernium_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Cernium_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Cernium_begin-1,Cernium_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Cernium']).slice(Cernium_begin-1,Cernium_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">阿爾克斯<img src="/src/assets/imgs/阿爾克斯.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Arcus_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Arcus_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Arcus_begin-1,Arcus_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Arcus']).slice(Arcus_begin-1,Arcus_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">奧迪溫<img src="/src/assets/imgs/奧迪溫.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Odium_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Odium_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Odium_begin-1,Odium_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Odium']).slice(Odium_begin-1,Odium_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">桃園境<img src="/src/assets/imgs/桃園境.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Shangri_La_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Shangri_La_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Shangri_La_begin-1,Shangri_La_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Shangri_La']).slice(Shangri_La_begin-1,Shangri_La_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">阿爾特利亞<img src="/src/assets/imgs/阿爾特利亞.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Arteria_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Arteria_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Arteria_begin-1,Arteria_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Arteria']).slice(Arteria_begin-1,Arteria_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td><div class="choice_label">卡爾西溫<img src="/src/assets/imgs/卡爾西溫.png" class="symbol_img"></div></td>
+                <td>
+                    <div class="input_level_area">
+                        <input type=number class="input_level" v-model="Carcion_begin">
+                        <div style="font-size:24px;">～</div>
+                        <input type=number class="input_level" v-model="Carcion_end">
+                    </div>
+                </td>
+                <td>{{ Sum_of_Nums(Object.values(aut_demand['Demand']).slice(Carcion_begin-1,Carcion_end-1)) }}</td>
+                <td>{{ formatNumber(Sum_of_Nums(Object.values(aut_prices['Carcion']).slice(Carcion_begin-1,Carcion_end-1))) }}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="total_cost total_cost_head">總金額</td>
+                <td style="text-align:end;" class="total_cost">{{ formatNumber(
+                    Sum_of_Nums(Object.values(arc_prices['Vanishing_Journey']).slice(Vanishing_Journey_begin-1,Vanishing_Journey_end-1))+
+                    Sum_of_Nums(Object.values(arc_prices['Chu_Chu_Island']).slice(Chu_Chu_Island_begin-1,Chu_Chu_Island_end-1))+
+                    Sum_of_Nums(Object.values(arc_prices['Lachelein']).slice(Lachelein_begin-1,Lachelein_end-1))+
+                    Sum_of_Nums(Object.values(arc_prices['Arcana']).slice(Arcana_begin-1,Arcana_end-1))+
+                    Sum_of_Nums(Object.values(arc_prices['Morass']).slice(Morass_begin-1,Morass_end-1))+
+                    Sum_of_Nums(Object.values(arc_prices['Esfera']).slice(Esfera_begin-1,Esfera_end-1))+
+                    Sum_of_Nums(Object.values(aut_prices['Cernium']).slice(Cernium_begin-1,Cernium_end-1))+
+                    Sum_of_Nums(Object.values(aut_prices['Arcus']).slice(Arcus_begin-1,Arcus_end-1))+
+                    Sum_of_Nums(Object.values(aut_prices['Odium']).slice(Odium_begin-1,Odium_end-1))+
+                    Sum_of_Nums(Object.values(aut_prices['Shangri_La']).slice(Shangri_La_begin-1,Shangri_La_end-1))+
+                    Sum_of_Nums(Object.values(aut_prices['Arteria']).slice(Arteria_begin-1,Arteria_end-1))+
+                    Sum_of_Nums(Object.values(aut_prices['Carcion']).slice(Carcion_begin-1,Carcion_end-1))
+                    ) }}</td>
+            </tr>
+        </table>
+        <div class="button save_button" @click="save_data">
+            按鈕
+        </div>
+    </div>
 </template>
 
 
 <script setup>
-import {computed, reactive, ref, watch, onBeforeMount} from "vue";
+import {computed, reactive, ref, watch, onBeforeMount, onMounted} from "vue";
 
 import _arc_prices from "/src/assets/ARC_prices.json";
 import _arc_demand from "/src/assets/ARC_demand.json";
@@ -349,10 +354,59 @@ watch(Carcion_end,(new_num)=>{
     if(new_num > 11){Carcion_end.value=11;}
     if(new_num < Carcion_begin.value){Carcion_begin.value=Carcion_end.value;}
 })
+
+
+import data from "/src/assets/SettingConfig.json";
+var _settings = reactive({});
+var _frontend = reactive({});
+onMounted(()=>{
+    _settings = data;
+    _frontend = _settings["FrontEnd"]
+});
+
+const save_data = async ()=>{
+    const _body = {"Vanishing_Journey":{"First":Vanishing_Journey_begin.value,"Last":Vanishing_Journey_end.value},
+                    "Chu_Chu_Island":{"First":Chu_Chu_Island_begin.value,"Last":Chu_Chu_Island_end.value},
+                    "Lachelein":{"First":Lachelein_begin.value,"Last":Lachelein_end.value},
+                    "Arcana":{"First":Arcana_begin.value,"Last":Arcana_end.value},
+                    "Morass":{"First":Morass_begin.value,"Last":Morass_end.value},
+                    "Esfera":{"First":Esfera_begin.value,"Last":Esfera_end.value},
+                    "Cernium":{"First":Cernium_begin.value,"Last":Cernium_end.value},
+                    "Arcus":{"First":Arcus_begin.value,"Last":Arcus_end.value},
+                    "Odium":{"First":Odium_begin.value,"Last":Odium_end.value},
+                    "Shangri_La":{"First":Shangri_La_begin.value,"Last":Shangri_La_end.value},
+                    "Arteria":{"First":Arteria_begin.value,"Last":Arteria_end.value},
+                    "Carcion":{"First":Carcion_begin.value,"Last":Carcion_end.value}}
+        const requestOptions = {
+                                method:"POST",
+                                headers:{
+                                    "Content-Type": "application/json"
+                                },
+                                body:JSON.stringify(_body)
+        }
+        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/savePriceData/",requestOptions)
+        .then(res =>{
+            return res.text();
+        })
+        .then(res =>{
+            console.log(res);
+            return res.substring(JSON.stringify(_body).length);
+        })
+        .then(res =>{
+            return JSON.parse(res);
+        })
+        .then(res =>{
+            console.log(res);
+        })
+}
 </script>
 
 
 <style scoped>
+.button{  /* 按鈕(所有應該要可以點擊的東西) */
+    cursor:pointer;  /* 滑鼠會變點擊圖樣(手指) */
+    transition-duration:0.2s;  /* 因為按鈕都有做滑鼠移入會變色 */
+}
 .symbol_img{
     width:40px;
     height:40px;
@@ -425,5 +479,21 @@ td:nth-child(4){
     text-align:center;
     font-weight:900;
     background-color:#888888;
+}
+.save_button{
+    font-size:16px;
+    background-color:#777777;
+    color:#ffffff;
+    padding:4px 10px;
+    font-size:14px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow: 2px -2px 4px 1px #00000066 inset,-1px 1px 4px 1px #ffffff88 inset;
+    margin-left:16px;
+}
+.save_button:hover{
+    background-color:#444444;
 }
 </style>
