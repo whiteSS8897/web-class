@@ -3,7 +3,7 @@
         <div style="height:100vh; display:flex; align-items:center; justify-content:center;">
             <div id="login_page" class="login_page">
                 <div style="display:flex; justify-content:center; align-items:center; font-size:1.5rem; margin-top:30px;">
-                    <img src="/maplestory.png" style="width:2rem;">
+                    <img src="/src/assets/imgs/maplestory.png" style="width:2rem;">
                     楓谷資料站登入介面
                 </div>
                 <form style="margin-top:30px;">
@@ -58,20 +58,20 @@ import data from "/src/assets/SettingConfig.json";
         else{p.type = "password";}
     })
 
+
+    
     const _account = ref('');
     const _password = ref('');
     const _token = ref('');
     const now_user = ref("unknown");
     const now_nickname = ref("unknown");
 
-    function getCookie(name) {
-        const temp = `; ${document.cookie}`;
-        const parts = temp.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-
+    
     const wrong_login = ref(false)
 
+
+    import cookies from "vue-cookies"
+    const fake_cookie = ref();
     const _log_in = async () =>{
         const _body = {"password":_password.value,"username":_account.value}
         const requestOptions = {
@@ -84,19 +84,15 @@ import data from "/src/assets/SettingConfig.json";
         }
         await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/login/",requestOptions)
         .then(res =>{
-            return res.text();
+            return res.json();
         })
         .then(res =>{
-            return res.substring(JSON.stringify(_body).length);
-        })
-        .then(res =>{
-            return JSON.parse(res);
-        })
-        .then(res =>{
-            _token.value = res["token"]
             console.log(res);
+            _token.value = res["token"]
             console.log(_token.value)
-            document.cookie = `token=${_token.value}`;
+            // cookies.set("token",_token.value)
+            fake_cookie.value = _token.value
+            emit("fake_cookie_emit",fake_cookie.value)
             now_user.value = _account.value;
             _check()
         })
@@ -117,15 +113,16 @@ import data from "/src/assets/SettingConfig.json";
 
     const now_kli = ref(kli.value)
 
-    const emit = defineEmits(["check_login","get_login_user","get_login_nickname"])
+    const emit = defineEmits(["check_login","get_login_user","get_login_nickname","fake_cookie_emit"])
     watch(now_kli,(newkli)=>{
         emit("check_login",newkli)
         //console.log("change:",newkli)
     })
 
     const _check = async () =>{
-        let check_token = getCookie("token")
-        console.log(check_token)
+        // let check_token = cookies.get("token")
+        let check_token = fake_cookie.value
+        console.log("checking token：",check_token)
         const _body = {"token":check_token}
         const requestOptions = {
                                 method:"POST",
@@ -136,17 +133,11 @@ import data from "/src/assets/SettingConfig.json";
         }
         await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkToken/",requestOptions)
         .then(res =>{
-            return res.text();
+            return res.json();
         })
         .then(res =>{
-            return res.substring(JSON.stringify(_body).length);
-        })
-        .then(res =>{
-            return JSON.parse(res);
-        })
-        .then(res =>{
-            const login_page = document.querySelector("#login_page");
             console.log(res);
+            const login_page = document.querySelector("#login_page");
             if (res["message"] === "Token is valid"){
                 //console.log(now_kli.value)
                 now_kli.value = true

@@ -36,6 +36,7 @@
                     +{{ Round_to(input_attack*(Math.floor(level/40)+1)*weapon_bonus[input_tier-1],6) }}攻
                 </span>
             </div>
+            <div class="button save_button" @click="save_data">儲存搜尋紀錄</div>
         </div>
 
         <div>
@@ -110,7 +111,7 @@
 
 
 <script setup>
-import {computed, reactive, ref, watch, onBeforeMount} from "vue";
+import {computed, reactive, ref, watch, onBeforeMount, onMounted} from "vue";
 const scope_option_begins = Array.from(Array(14).keys(),x=>x*20);
 const scope_option_ends = Array.from(Array(13).keys(),x=>x*20+19); scope_option_ends.push(275);
 const scope_choosed = ref(0);
@@ -138,6 +139,82 @@ const input_tier = ref(1);
 const weapon_bonus = reactive([0.01 ,0.02 ,0.03 ,0.044 ,0.0605 ,0.07986 ,0.102487]);
 watch(input_tier,(new_val)=>{input_tier.value = Number(new_val);})
 const Round_to = (num,f)=>{return Math.round(num*10**f)/10**f;}
+
+
+
+import data from "/src/assets/SettingConfig.json";
+var _settings = reactive({});
+var _frontend = reactive({});
+onMounted(()=>{
+    _settings = data;
+    _frontend = _settings["FrontEnd"]
+    get_data();
+});
+
+
+const props = defineProps({
+    user_name:{},
+})
+const _now_user = computed(()=>{
+        return props.user_name
+    })
+const save_data = async ()=>{
+    const bonusStatData = {
+                    "level":level.value,
+                    "weaponATT":input_attack.value,
+                    "Tier":input_tier.value}
+    const _body = {
+        "userName": _now_user.value,
+        "bonusStatData": bonusStatData
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    console.log(JSON.stringify(_body))
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/saveBonusStatData/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    .then(res =>{
+        console.log(res);
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
+
+const get_data = async ()=>{
+    const _body = {
+        "userName": _now_user.value
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getBonusStatData/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    .then(res =>{
+        return JSON.parse(res["bonusstatData"]);
+    })
+    .then(res =>{
+        console.log(res);
+        level.value = res["level"];
+        input_attack.value = res["weaponATT"];
+        input_tier.value = res["Tier"]
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
 </script>
 
 
@@ -258,5 +335,22 @@ td{
 .attack_input{
     width:70px;
     font-size:18px;
+}
+.save_button{
+    font-size:16px;
+    background-color:#777777;
+    color:#ffffff;
+    padding:4px 10px;
+    font-size:14px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow: 2px -2px 4px 1px #00000066 inset,-1px 1px 4px 1px #ffffff88 inset;
+    margin-top:24px;
+    width:fit-content;
+}
+.save_button:hover{
+    background-color:#444444;
 }
 </style>

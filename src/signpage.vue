@@ -2,7 +2,7 @@
     <div style="height:100vh; display:flex; align-items:center; justify-content:center;">
         <div id="login_page" class="login_page">
             <div style="display:flex; justify-content:center; align-items:center; font-size:1.5rem; margin-top:30px;">
-                <img src="/maplestory.png" style="width:2rem;">
+                <img src="/src/assets/imgs/maplestory.png" style="width:2rem;">
                 楓谷資料站登入介面
             </div>
             <form style="margin-top:30px;">
@@ -97,13 +97,7 @@ import data from "/src/assets/SettingConfig.json";
         }
         await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/signup/",requestOptions)
         .then(res =>{
-            return res.text();
-        })
-        .then(res =>{
-            return res.substring(JSON.stringify(_body).length);
-        })
-        .then(res =>{
-            return JSON.parse(res);
+            return res.json();
         })
         .then(res =>{
             console.log(res)

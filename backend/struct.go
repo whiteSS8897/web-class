@@ -110,9 +110,9 @@ type Range struct {
 
 // 星火數據
 type BonusStatData struct {
-	Level     int    `json:"level"`
-	WeaponATT int    `json:"weaponATT"`
-	Tier      string `json:"Tier"`
+	Level     int `json:"level"`
+	WeaponATT int `json:"weaponATT"`
+	Tier      int `json:"Tier"`
 }
 
 // 各種小算盤的JSON結構
@@ -124,7 +124,7 @@ type CalculatorData struct {
 }
 
 type Calculator1 struct {
-	CombatEffectiveness int `json:"Combat Effectiveness"`
+	CombatEffectiveness float64 `json:"Combat Effectiveness"`
 }
 
 type Calculator2 struct {

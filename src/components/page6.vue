@@ -1,4 +1,5 @@
 <template>
+    <div class="button save_button" @click="save_data">儲存搜尋紀錄</div>
     <div style="display:flex; align-items:start;">
         <div class="raid_power_area">
             <div class="calculator_title">戰地硬幣小算盤</div>
@@ -53,7 +54,7 @@
 
 
 <script setup>
-import {computed, reactive, ref, watch, onBeforeMount} from "vue";
+import {computed, reactive, ref, watch, onBeforeMount, onMounted} from "vue";
 
 const Sum_of_Nums = (arr)=>{
     if(arr.length === 0){return 0;}
@@ -85,6 +86,92 @@ const ignore_def_1 = ref(0);
 const ignore_def_add = ref(0);
 const ignore_def_2 = ref(0);
 const ignore_def_minus = ref(0);
+
+
+import data from "/src/assets/SettingConfig.json";
+var _settings = reactive({});
+var _frontend = reactive({});
+onMounted(()=>{
+    _settings = data;
+    _frontend = _settings["FrontEnd"]
+    get_data();
+});
+
+
+const props = defineProps({
+    user_name:{},
+})
+const _now_user = computed(()=>{
+        return props.user_name
+    })
+const save_data = async ()=>{
+    const calculatorData = {
+                    "Calculator1":{"Combat Effectiveness":raid_power.value},
+                    "Calculator2":{"Current Total of Boss Damage":total_damage.value,
+                                    "Boss Damage Efficiency":damage.value,
+                                    "Attack Damage Efficiency":attack_p.value},
+                    "Calculator3":{"Original":ignore_def_1.value,
+                                    "Increase":ignore_def_add.value},
+                    "Calculator4":{"Original":ignore_def_2.value,
+                                    "Decrease":ignore_def_minus.value}}
+    const _body = {
+        "userName": _now_user.value,
+        "calculatorData": calculatorData
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    console.log(JSON.stringify(_body))
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/saveCalculatorData/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    .then(res =>{
+        console.log(res);
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
+
+const get_data = async ()=>{
+    const _body = {
+        "userName": _now_user.value
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getCalculatorData/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    .then(res =>{
+        return JSON.parse(res["calculatorData"]);
+    })
+    .then(res =>{
+        console.log(res);
+        raid_power.value = res["Calculator1"]["Combat Effectiveness"];
+        raid_power_display.value = raid_power.value.toString();
+        total_damage.value = res["Calculator2"]["Current Total of Boss Damage"];
+        damage.value = res["Calculator2"]["Boss Damage Efficiency"];
+        attack_p.value = res["Calculator2"]["Attack Damage Efficiency"];
+        ignore_def_1.value = res["Calculator3"]["Original"];
+        ignore_def_add.value = res["Calculator3"]["Increase"];
+        ignore_def_2.value = res["Calculator4"]["Original"];
+        ignore_def_minus.value = res["Calculator4"]["Decrease"];
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
 </script>
 
 
@@ -136,5 +223,22 @@ input{
     width:250px;
     border:#ffff88 dashed 3px;
     margin-left:10px;
+}
+.save_button{
+    font-size:16px;
+    background-color:#777777;
+    color:#ffffff;
+    padding:4px 10px;
+    font-size:14px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow: 2px -2px 4px 1px #00000066 inset,-1px 1px 4px 1px #ffffff88 inset;
+    margin-bottom:24px;
+    width:fit-content;
+}
+.save_button:hover{
+    background-color:#444444;
 }
 </style>

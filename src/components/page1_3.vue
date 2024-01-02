@@ -360,6 +360,7 @@ var _frontend = reactive({});
 onMounted(()=>{
     _settings = data;
     _frontend = _settings["FrontEnd"]
+    get_data();
 });
 
 
@@ -397,18 +398,60 @@ const save_data = async ()=>{
     console.log(JSON.stringify(_body))
     await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/savePriceData/",requestOptions)
     .then(res =>{
-        console.log(res);
-        return res.text();
+        return res.json();
     })
     .then(res =>{
         console.log(res);
-        return res.substring(JSON.stringify(_body).length);
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
+
+const get_data = async ()=>{
+    const _body = {
+        "userName": _now_user.value
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getPriceData/",requestOptions)
+    .then(res =>{
+        return res.json();
     })
     .then(res =>{
-        return JSON.parse(res);
+        return JSON.parse(res["pricesData"]);
     })
     .then(res =>{
         console.log(res);
+        Vanishing_Journey_begin.value = res["Vanishing_Journey"]["start"];
+        Vanishing_Journey_end.value = res["Vanishing_Journey"]["end"];
+        Chu_Chu_Island_begin.value = res["Chu_Chu_Island"]["start"];
+        Chu_Chu_Island_end.value = res["Chu_Chu_Island"]["end"];
+        Lachelein_begin.value = res["Lachelein"]["start"];
+        Lachelein_end.value = res["Lachelein"]["end"];
+        Arcana_begin.value = res["Arcana"]["start"];
+        Arcana_end.value = res["Arcana"]["end"];
+        Morass_begin.value = res["Morass"]["start"];
+        Morass_end.value = res["Morass"]["end"];
+        Esfera_begin.value = res["Esfera"]["start"];
+        Esfera_end.value = res["Esfera"]["end"];
+        Cernium_begin.value = res["Cernium"]["start"];
+        Cernium_end.value = res["Cernium"]["end"];
+        Arcus_begin.value = res["Arcus"]["start"];
+        Arcus_end.value = res["Arcus"]["end"];
+        Odium_begin.value = res["Odium"]["start"];
+        Odium_end.value = res["Odium"]["end"];
+        Shangri_La_begin.value = res["Shangri_La"]["start"];
+        Shangri_La_end.value = res["Shangri_La"]["end"];
+        Arteria_begin.value = res["Arteria"]["start"];
+        Arteria_end.value = res["Arteria"]["end"];
+        Carcion_begin.value = res["Carcion"]["start"];
+        Carcion_end.value = res["Carcion"]["end"];
     })
     .catch(res =>{
         console.log(res);

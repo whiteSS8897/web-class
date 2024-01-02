@@ -32,6 +32,7 @@
                 <span style="background-color:#ffffbb66; padding:5px 10px;">{{ calculated_attack }}攻</span>
                 <span style="background-color:#ffffbb66; padding:5px 10px;">{{ calculated_all_stat }}全</span>
             </div>
+            <div class="button save_button" @click="save_data">儲存搜尋紀錄</div>
         </div>
         <div>
             <table style="margin-left:30px;">
@@ -63,7 +64,7 @@
 
 
 <script setup>
-import {computed, reactive, ref, watch, onBeforeMount} from "vue";
+import {computed, reactive, ref, watch, onBeforeMount, onMounted} from "vue";
 
 import star from "/src/assets/star.json";
 const scope_choosed = ref(Object.keys(star).sort()[0]);
@@ -86,6 +87,82 @@ watch([scope_choosed,begin,end,is_weapon],(newarr)=>{
         if(typeof(temp[i]) === "number"){calculated_all_stat.value += search['all_stat']}
     }
 })
+
+
+import data from "/src/assets/SettingConfig.json";
+var _settings = reactive({});
+var _frontend = reactive({});
+onMounted(()=>{
+    _settings = data;
+    _frontend = _settings["FrontEnd"]
+    get_data();
+});
+
+
+const props = defineProps({
+    user_name:{},
+})
+const _now_user = computed(()=>{
+        return props.user_name
+    })
+const save_data = async ()=>{
+    const starForceData = {
+                    "Scope":scope_choosed.value,
+                    "Range":{"start":begin.value,"end":end.value},
+                    "IsWeapon":is_weapon.value}
+    const _body = {
+        "userName": _now_user.value,
+        "starForceData": starForceData
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    console.log(JSON.stringify(_body))
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/saveStarForceData/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    .then(res =>{
+        console.log(res);
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
+
+const get_data = async ()=>{
+    const _body = {
+        "userName": _now_user.value
+    }
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getStarForceData/",requestOptions)
+    .then(res =>{
+        return res.json();
+    })
+    .then(res =>{
+        return JSON.parse(res["starforceData"]);
+    })
+    .then(res =>{
+        console.log(res);
+        scope_choosed.value = res["Scope"];
+        begin.value = res["Range"]["start"];
+        end.value = res["Range"]["end"];
+        is_weapon.value = res["IsWeapon"];
+    })
+    .catch(res =>{
+        console.log(res);
+    })
+}
 </script>
 
 
@@ -175,5 +252,22 @@ td{
 }
 .change_if_weapon:hover{
     background-color:#ee11ee88;
+}
+.save_button{
+    font-size:16px;
+    background-color:#777777;
+    color:#ffffff;
+    padding:4px 10px;
+    font-size:14px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow: 2px -2px 4px 1px #00000066 inset,-1px 1px 4px 1px #ffffff88 inset;
+    margin-top:24px;
+    width:fit-content;
+}
+.save_button:hover{
+    background-color:#444444;
 }
 </style>

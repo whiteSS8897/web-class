@@ -109,10 +109,10 @@ func CheckIdentity(c *gin.Context) {
 	account := Account{}
 	c.BindJSON(&account)
 	fmt.Printf("%v", &account)
-	c.JSON(http.StatusOK, gin.H{
-		"username": account.Username,
-		"password": account.Password,
-	})
+	// c.JSON(http.StatusOK, gin.H{
+	// 	"username": account.Username,
+	// 	"password": account.Password,
+	// })
 	fmt.Printf("usernam=%s   ,password=%s \n", account.Username, account.Password)
 
 	var dbSalt, dbHash string
@@ -270,9 +270,9 @@ func CheckToken(c *gin.Context) {
 	token := Token_ftob{}
 	c.BindJSON(&token)
 	fmt.Printf("%v", &token)
-	c.JSON(http.StatusOK, gin.H{
-		"token": token.Token,
-	})
+	// c.JSON(http.StatusOK, gin.H{
+	// 	"token": token.Token,
+	// })
 	fmt.Printf("token=%s", token.Token)       // 從前端的請求中獲取 token
 	isValid := validateToken(token.Token, db) // 驗證 token 是否有效
 
@@ -571,6 +571,7 @@ func SaveStarForceData(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println(requestData.StarForceData)
 	jsonData, err := json.Marshal(requestData.StarForceData)
 	if err != nil {
 		// 錯誤處理

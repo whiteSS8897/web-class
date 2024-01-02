@@ -1,7 +1,7 @@
 <template>
     <div v-if="keep_log_in === false">
         <loginpage
-        @check_login="handle_change_log" @get_login_user="handle_login_user" @get_login_nickname="handle_login_nickname"
+        @check_login="handle_change_log" @get_login_user="handle_login_user" @get_login_nickname="handle_login_nickname" @fake_cookie_emit="handle_fake_cookie"
         v-bind:_kli="keep_log_in"/>
     </div>
     <div v-if="keep_log_in === true">
@@ -24,15 +24,15 @@
                 <page3_3 v-if="choose === '3-3'"/>
                 <page3_4 v-if="choose === '3-4'"/>
                 <page3_5 v-if="choose === '3-5'"/>
-                <page4 v-if="choose === '4'"/>
-                <page5 v-if="choose === '5'"/>
-                <page6 v-if="choose === '6'"/>
+                <page4 v-if="choose === '4'" v-bind:user_name="now_user"/>
+                <page5 v-if="choose === '5'" v-bind:user_name="now_user"/>
+                <page6 v-if="choose === '6'" v-bind:user_name="now_user"/>
                 <page7 v-if="choose === '7'"/>
                 <page8 v-if="choose === '8'"/>
 
                 <personal_setting v-if="choose === 'personal_setting'"
                 v-bind:user_name="now_user" v-bind:nickname="now_nickname" v-bind:avatar="received_avatar"
-                @re_check="_check"/>
+                @re_check="_check" @update_avatar="_check"/>
             </div>
         </div>
     </div>
@@ -126,26 +126,24 @@ const handle_login_user = (login_user)=>{
 const handle_login_nickname = (login_nickname)=>{
     now_nickname.value = login_nickname
 }
+
+const fake_cookie = ref();
+const handle_fake_cookie = (emit_f)=>{
+    fake_cookie.value = emit_f
+}
+import cookies from "vue-cookies"
 const _logout = () =>{
-        let d = new Date()
         keep_log_in.value = false;
-        document.cookie = "token='';expires=" + d.toGMTString();
+        cookies.remove("token")
 }
 
 import personal_setting from "./components/personal_setting.vue";
 const open_personal_setting = ()=>{choose.value = "personal_setting"}
 
 
-function getCookie(name) {
-        const temp = `; ${document.cookie}`;
-        console.log(temp)
-        const parts = temp.split(`; ${name}=`);
-        console.log(parts)
-        if (parts.length === 2) return parts.pop().split(';').shift();
-        else return ''
-    }
 const _check = async () =>{
-        let check_token = getCookie("token")
+        // let check_token = cookies.get("token")
+        let check_token = fake_cookie.value
         console.log(check_token)
         const _body = {"token":check_token}
         const requestOptions = {
@@ -157,13 +155,7 @@ const _check = async () =>{
         }
         await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkToken/",requestOptions)
         .then(res =>{
-            return res.text();
-        })
-        .then(res =>{
-            return res.substring(JSON.stringify(_body).length);
-        })
-        .then(res =>{
-            return JSON.parse(res);
+            return res.json();
         })
         .then(res =>{
             console.log(res);
@@ -197,7 +189,7 @@ const get_image = async () =>{
                             },
                             body:JSON.stringify(_body)
     }
-    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/getImage/",requestOptions)
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/checkImage/",requestOptions)
     .then(res =>{
         return res.json();
     })
