@@ -167,9 +167,7 @@
                     ) }}</td>
             </tr>
         </table>
-        <div class="button save_button" @click="save_data">
-            按鈕
-        </div>
+        <div class="button save_button" @click="save_data">儲存搜尋紀錄</div>
     </div>
 </template>
 
@@ -364,40 +362,53 @@ onMounted(()=>{
     _frontend = _settings["FrontEnd"]
 });
 
+
+const props = defineProps({
+    user_name:{},
+})
+const _now_user = computed(()=>{
+        return props.user_name
+    })
 const save_data = async ()=>{
-    const _body = {"Vanishing_Journey":{"Start":Vanishing_Journey_begin.value,"End":Vanishing_Journey_end.value},
-                    "Chu_Chu_Island":{"Start":Chu_Chu_Island_begin.value,"End":Chu_Chu_Island_end.value},
-                    "Lachelein":{"Start":Lachelein_begin.value,"End":Lachelein_end.value},
-                    "Arcana":{"Start":Arcana_begin.value,"End":Arcana_end.value},
-                    "Morass":{"Start":Morass_begin.value,"End":Morass_end.value},
-                    "Esfera":{"Start":Esfera_begin.value,"End":Esfera_end.value},
-                    "Cernium":{"Start":Cernium_begin.value,"End":Cernium_end.value},
-                    "Arcus":{"Start":Arcus_begin.value,"End":Arcus_end.value},
-                    "Odium":{"Start":Odium_begin.value,"End":Odium_end.value},
-                    "Shangri_La":{"Start":Shangri_La_begin.value,"End":Shangri_La_end.value},
-                    "Arteria":{"Start":Arteria_begin.value,"End":Arteria_end.value},
-                    "Carcion":{"Start":Carcion_begin.value,"End":Carcion_end.value}}
-        const requestOptions = {
-                                method:"POST",
-                                headers:{
-                                    "Content-Type": "application/json"
-                                },
-                                body:JSON.stringify(_body)
-        }
-        await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/savePriceData/",requestOptions)
-        .then(res =>{
-            return res.text();
-        })
-        .then(res =>{
-            console.log(res);
-            return res.substring(JSON.stringify(_body).length);
-        })
-        .then(res =>{
-            return JSON.parse(res);
-        })
-        .then(res =>{
-            console.log(res);
-        })
+    const _body = {"userName":_now_user.value,
+                    "Vanishing_Journey":{"start":Vanishing_Journey_begin.value,"end":Vanishing_Journey_end.value},
+                    "Chu_Chu_Island":{"start":Chu_Chu_Island_begin.value,"end":Chu_Chu_Island_end.value},
+                    "Lachelein":{"start":Lachelein_begin.value,"end":Lachelein_end.value},
+                    "Arcana":{"start":Arcana_begin.value,"end":Arcana_end.value},
+                    "Morass":{"start":Morass_begin.value,"end":Morass_end.value},
+                    "Esfera":{"start":Esfera_begin.value,"end":Esfera_end.value},
+                    "Cernium":{"start":Cernium_begin.value,"end":Cernium_end.value},
+                    "Arcus":{"start":Arcus_begin.value,"end":Arcus_end.value},
+                    "Odium":{"start":Odium_begin.value,"end":Odium_end.value},
+                    "Shangri_La":{"start":Shangri_La_begin.value,"end":Shangri_La_end.value},
+                    "Arteria":{"start":Arteria_begin.value,"end":Arteria_end.value},
+                    "Carcion":{"start":Carcion_begin.value,"end":Carcion_end.value}}
+    const requestOptions = {
+                            method:"POST",
+                            headers:{
+                                "Content-Type": "application/json"
+                            },
+                            body:JSON.stringify(_body)
+    }
+    console.log(JSON.stringify(_body))
+    await fetch("http://"+_frontend["Hostname"]+":"+_frontend["Backend_port"]+"/savePriceData/",requestOptions)
+    .then(res =>{
+        console.log(res);
+        return res.text();
+    })
+    .then(res =>{
+        console.log(res);
+        return res.substring(JSON.stringify(_body).length);
+    })
+    .then(res =>{
+        return JSON.parse(res);
+    })
+    .then(res =>{
+        console.log(res);
+    })
+    .catch(res =>{
+        console.log(res);
+    })
 }
 </script>
 

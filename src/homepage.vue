@@ -16,7 +16,7 @@
             <div class="main_page">
                 <page1_1 v-if="choose === '1-1'"/>
                 <page1_2 v-if="choose === '1-2'"/>
-                <page1_3 v-if="choose === '1-3'"/>
+                <page1_3 v-if="choose === '1-3'" v-bind:user_name="now_user"/>
                 <page2_1 v-if="choose === '2-1'"/>
                 <page2_2 v-if="choose === '2-2'"/>
                 <page3_1 v-if="choose === '3-1'"/>
