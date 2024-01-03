@@ -3,7 +3,7 @@
         <div id="login_page" class="login_page">
             <div style="display:flex; justify-content:center; align-items:center; font-size:1.5rem; margin-top:30px;">
                 <img src="/src/assets/imgs/maplestory.png" style="width:2rem;">
-                楓谷資料站登入介面
+                楓谷資料站註冊介面
             </div>
             <form style="margin-top:30px;">
                 <fieldset style="border:none; width:calc(100% - 38px); padding:15px;">
